@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #0A0A0F;
+  --color-bg-secondary: #12121A;
+  --color-bg-tertiary: #1A1A28;
+  --color-bg-glass: rgba(255, 255, 255, 0.04);
+  
+  --color-accent: #8B5CF6;
+  --color-accent-glow: rgba(139, 92, 246, 0.3);
+  
+  --color-text-primary: #F0F0F5;
+  --color-text-secondary: #8888A0;
+  --color-text-tertiary: #55556A;
+  
+  --blur-glass: 20px;
+  
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-display: var(--font-display), system-ui, sans-serif;
+  
+  /* Dynamic color for album art tinting */
+  --color-dynamic: var(--dominant-color, var(--color-accent));
+  --color-dynamic-glow: var(--dominant-color-glow, var(--color-accent-glow));
+}
+
+/* Base styles */
+@layer base {
+  :root {
+    color-scheme: dark;
+    --split-left: #2E3A59; /* Example default blue */
+    --split-right: #F2EFE9; /* Example default ivory */
+  }
+
+  html, body {
+    @apply bg-bg-primary text-text-primary font-sans antialiased overflow-x-hidden;
+    height: 100%;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-bg-tertiary rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-text-tertiary;
+  }
+}
+
+/* Glassmorphism utilities */
+@layer utilities {
+  .glass {
+    @apply bg-bg-glass backdrop-blur-[var(--blur-glass)];
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .glass-hover {
+    @apply transition-colors duration-300;
+  }
+  
+  .glass-hover:hover {
+    @apply bg-[rgba(255,255,255,0.08)];
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  
+  .glass-heavy {
+    @apply bg-[rgba(20,20,30,0.6)] backdrop-blur-2xl;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-pill {
+    @apply bg-black/20 backdrop-blur-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.2)];
+  }
+
+  /* The vinyl groove texture */
+  .vinyl-grooves {
+    background: repeating-radial-gradient(
+      #111 0%,
+      #111 1%,
+      #1a1a1a 2%,
+      #111 3%
+    );
+    box-shadow: 
+      inset 0 0 40px rgba(255, 255, 255, 0.1),
+      inset 0 0 10px rgba(0, 0, 0, 0.5),
+      0 10px 40px rgba(0,0,0,0.5);
+  }
+
+  /* For realistic lighting on the vinyl */
+  .vinyl-lighting {
+    background: conic-gradient(
+      from 90deg,
+      rgba(255,255,255,0) 0deg,
+      rgba(255,255,255,0.1) 45deg,
+      rgba(255,255,255,0) 90deg,
+      rgba(255,255,255,0) 180deg,
+      rgba(255,255,255,0.1) 225deg,
+      rgba(255,255,255,0) 270deg,
+      rgba(255,255,255,0) 360deg
+    );
+    mix-blend-mode: overlay;
+  }
+}
+
+/* Animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px var(--color-dynamic-glow);
+  }
+  50% {
+    box-shadow: 0 0 30px var(--color-dynamic-glow);
+  }
+}
+
+.animate-glow {
+  animation: pulse-glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 4s linear infinite;
+}
+
+.split-bg {
+  background: linear-gradient(110deg, var(--split-left) 50%, var(--split-right) 50.1%);
+}
