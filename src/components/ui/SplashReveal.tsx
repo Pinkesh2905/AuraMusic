@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -266,7 +267,7 @@ export function SplashReveal({ onComplete }: SplashRevealProps) {
     // 2. Trigger automatic screen completion reveal after 4.2 seconds
     const completeTimer = setTimeout(() => {
       onComplete();
-    }, 4200);
+    }, 2000);
 
     // 3. Setup canvas particle background animation
     const canvas = canvasRef.current;
@@ -390,15 +391,25 @@ export function SplashReveal({ onComplete }: SplashRevealProps) {
     };
   }, []);
 
-  return (
+  const content = (
     <AnimatePresence>
       <motion.div
         key="splash-reveal"
         initial={{ opacity: 1 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0, filter: "blur(20px)" }}
-        transition={{ duration: 1.2, ease: "easeInOut" }}
-        className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[#05030f] overflow-hidden crt-scanlines"
+        transition={{ duration: 2, ease: "easeInOut" }}
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 99999,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#05030f",
+          overflow: "hidden",
+        }}
       >
         {/* Deep starry background with retro grid mask */}
         <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_30%_30%,#ff2bd6_0%,transparent_60%),radial-gradient(circle_at_70%_70%,#00f5ff_0%,transparent_60%)] z-0" />
@@ -504,4 +515,6 @@ export function SplashReveal({ onComplete }: SplashRevealProps) {
       </motion.div>
     </AnimatePresence>
   );
+
+  return createPortal(content, document.body);
 }
