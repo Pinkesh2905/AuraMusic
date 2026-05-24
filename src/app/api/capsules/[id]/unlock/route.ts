@@ -7,8 +7,9 @@ import { SpotifyClient } from "@/lib/spotify/client";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
     // @ts-ignore
     const userId = session?.user?.id;
@@ -19,7 +20,6 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { id } = params;
     if (!id) return NextResponse.json({ error: "Missing ID" }, { status: 400 });
 
     const capsule = await prisma.playlist.findUnique({

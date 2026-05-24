@@ -13,6 +13,9 @@ interface PlayerState {
   deviceId: string | null;
   dominantColor: string;
   isLorePanelOpen: boolean;
+  isMoodPromptOpen: boolean;
+  isFullScreenPlayerOpen: boolean;
+  isLoadingQueue: boolean;
   
   // Actions
   play: (track: SpotifyTrack, context?: SpotifyTrack[]) => void;
@@ -27,6 +30,22 @@ interface PlayerState {
   setDominantColor: (color: string) => void;
   setDeviceId: (id: string) => void;
   toggleLorePanel: () => void;
+  setMoodPromptOpen: (open: boolean) => void;
+  setFullScreenPlayerOpen: (open: boolean) => void;
+  appendToQueue: (tracks: SpotifyTrack[]) => void;
+  setLoadingQueue: (loading: boolean) => void;
+  isQueueRunningLow: () => boolean;
+
+  // SDK Actions (Set by the hook)
+  sdk: {
+    playTrack: (uri: string | string[]) => Promise<void>;
+    pause: () => Promise<void>;
+    resume: () => Promise<void>;
+    next: () => Promise<void>;
+    previous: () => Promise<void>;
+    seek: (ms: number) => Promise<void>;
+  } | null;
+  setSdk: (sdk: any) => void;
 }
 
 export const usePlayerStore = create<PlayerState>((set, get) => ({
@@ -41,43 +60,64 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   deviceId: null,
   dominantColor: '#8B5CF6',
   isLorePanelOpen: false,
+  isMoodPromptOpen: false,
+  isFullScreenPlayerOpen: false,
+  isLoadingQueue: false,
 
-  play: (track, context = []) => set({ 
-    currentTrack: track, 
-    queue: context,
-    isPlaying: true,
-    progress: 0,
-    duration: track.duration_ms
-  }),
+  play: (track, context = []) => {
+    set({ 
+      currentTrack: track, 
+      queue: context,
+      isPlaying: true,
+      progress: 0,
+      duration: track.duration_ms
+    });
+  },
   
   pause: () => set({ isPlaying: false }),
   resume: () => set({ isPlaying: true }),
   
   next: () => {
-    // Basic queue logic
-    const { queue, currentTrack } = get();
+    const { queue, currentTrack, sdk } = get();
     if (!currentTrack || queue.length === 0) return;
     const currentIndex = queue.findIndex(t => t.id === currentTrack.id);
     if (currentIndex < queue.length - 1) {
-      set({ currentTrack: queue[currentIndex + 1], progress: 0 });
+      const nextTrack = queue[currentIndex + 1];
+      set({ currentTrack: nextTrack, progress: 0, duration: nextTrack.duration_ms });
+      if (sdk) {
+        sdk.next().catch(err => console.warn("[Aura] SDK next failed:", err));
+      }
     }
   },
   
   previous: () => {
-    // Basic queue logic
-    const { queue, currentTrack, progress } = get();
+    const { queue, currentTrack, progress, sdk } = get();
     if (!currentTrack || queue.length === 0) return;
     if (progress > 3000) {
       set({ progress: 0 });
+      if (sdk) {
+        sdk.seek(0).catch(err => console.warn("[Aura] SDK seek failed:", err));
+      }
       return;
     }
     const currentIndex = queue.findIndex(t => t.id === currentTrack.id);
     if (currentIndex > 0) {
-      set({ currentTrack: queue[currentIndex - 1], progress: 0 });
+      const prevTrack = queue[currentIndex - 1];
+      set({ currentTrack: prevTrack, progress: 0, duration: prevTrack.duration_ms });
+      if (sdk) {
+        sdk.previous().catch(err => console.warn("[Aura] SDK previous failed:", err));
+      }
     }
   },
   
-  seek: (ms) => set({ progress: ms }),
+  seek: (ms) => {
+    const { sdk } = get();
+    if (sdk) {
+      sdk.seek(ms);
+    } else {
+      set({ progress: ms });
+    }
+  },
   setVolume: (vol) => set({ volume: vol }),
   toggleShuffle: () => set(state => ({ shuffle: !state.shuffle })),
   
@@ -89,5 +129,24 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   
   setDominantColor: (color) => set({ dominantColor: color }),
   setDeviceId: (id) => set({ deviceId: id }),
-  toggleLorePanel: () => set(state => ({ isLorePanelOpen: !state.isLorePanelOpen }))
+  toggleLorePanel: () => set(state => ({ isLorePanelOpen: !state.isLorePanelOpen })),
+  setMoodPromptOpen: (open) => set({ isMoodPromptOpen: open }),
+  setFullScreenPlayerOpen: (open) => set({ isFullScreenPlayerOpen: open }),
+
+  appendToQueue: (tracks) => {
+    const { queue } = get();
+    const existingIds = new Set(queue.map(t => t.id));
+    const newTracks = tracks.filter(t => !existingIds.has(t.id));
+    set({ queue: [...queue, ...newTracks] });
+  },
+  setLoadingQueue: (loading) => set({ isLoadingQueue: loading }),
+  isQueueRunningLow: () => {
+    const { queue, currentTrack } = get();
+    if (!currentTrack || queue.length === 0) return true;
+    const currentIndex = queue.findIndex(t => t.id === currentTrack.id);
+    return currentIndex >= queue.length - 3;
+  },
+  
+  sdk: null,
+  setSdk: (sdk) => set({ sdk })
 }));

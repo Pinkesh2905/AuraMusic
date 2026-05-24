@@ -41,6 +41,7 @@ export interface SpotifyPlaylist {
     id: string;
     display_name: string;
   };
+  public: boolean;
   tracks: {
     total: number;
     items?: { track: SpotifyTrack }[];

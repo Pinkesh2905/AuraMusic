@@ -1,100 +1,171 @@
 "use client";
 
 import { usePlayerStore } from "@/stores/playerStore";
-import { Play, Pause, SkipForward, SkipBack, Volume2, Repeat, Shuffle, Sparkles } from "lucide-react";
+import { Play, Pause, SkipForward, SkipBack, Volume2, Music2, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 
 export function FloatingControls() {
-  const { isPlaying, play, pause, next, previous, progress, duration, currentTrack, toggleLorePanel, isLorePanelOpen } = usePlayerStore();
+  const { data: session } = useSession();
+  const { 
+    isPlaying, 
+    pause, 
+    resume, 
+    next, 
+    previous, 
+    currentTrack, 
+    sdk, 
+    toggleLorePanel, 
+    isLorePanelOpen,
+    volume,
+    setVolume,
+    setFullScreenPlayerOpen
+  } = usePlayerStore();
 
-  const handlePlayPause = () => {
-    if (!currentTrack) return;
-    if (isPlaying) pause();
-    else play(currentTrack, [currentTrack]);
-  };
-
-  const formatTime = (ms: number) => {
-    const totalSeconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
-
-  const progressPercentage = duration > 0 ? (progress / duration) * 100 : 0;
+  if (!currentTrack) return null;
 
   return (
-    <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50">
-      <motion.div 
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="glass-pill px-8 py-4 rounded-full flex items-center gap-8 w-[600px] max-w-[90vw]"
+    <motion.div
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      className="neural-card crt-scanlines p-3 md:p-4 flex items-center justify-between gap-4 md:gap-8 w-full backdrop-blur-3xl border border-cyan-300/20 shadow-[0_40px_100px_rgba(0,0,0,0.6)]"
+    >
+      {/* Left: Track Info */}
+      <div 
+        onClick={() => setFullScreenPlayerOpen(true)}
+        className="flex items-center gap-4 min-w-0 flex-1 md:flex-none md:w-[300px] cursor-pointer hover:opacity-90 transition-all active:scale-[0.98]"
       >
-        {/* Track time & Progress */}
-        <div className="flex-1 flex items-center gap-3">
-          <span className="text-xs text-white/60 font-medium w-10 text-right">
-            {formatTime(progress)}
-          </span>
-          <div className="flex-1 h-1.5 bg-black/40 rounded-full overflow-hidden relative cursor-pointer">
-            <div 
-              className="absolute top-0 left-0 h-full bg-white rounded-full transition-all duration-300"
-              style={{ width: `${progressPercentage}%` }}
-            />
-          </div>
-          <span className="text-xs text-white/60 font-medium w-10">
-            {formatTime(duration)}
-          </span>
+        <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl overflow-hidden shadow-2xl relative shrink-0 border border-cyan-300/25 bg-black y2k-chrome p-1">
+          {currentTrack?.album?.images?.[0]?.url ? (
+            <img src={currentTrack.album.images[0].url} alt="" className="w-full h-full rounded-xl object-cover" />
+          ) : (
+            <div className="w-full h-full rounded-xl bg-surface-container flex items-center justify-center">
+              <Music2 className="w-6 h-6 text-text-tertiary" />
+            </div>
+          )}
         </div>
 
-        {/* Controls */}
-        <div className="flex items-center gap-6 shrink-0">
-          <button suppressHydrationWarning className="text-white/50 hover:text-white transition-colors">
-            <Shuffle className="w-4 h-4" />
-          </button>
-          
-          <button suppressHydrationWarning onClick={previous} className="text-white/80 hover:text-white transition-colors">
-            <SkipBack className="w-5 h-5 fill-current" />
-          </button>
-          
+        <div className="flex flex-col min-w-0">
+          <span className="text-[9px] font-mono font-black tracking-[0.26em] text-[#b6ff00] uppercase mb-0.5">
+            Now Spinning
+          </span>
+          <h4 className="text-sm font-display font-black uppercase tracking-normal truncate text-white">
+            {currentTrack?.name || "Aura Silence"}
+          </h4>
+          <p className="text-[10px] font-mono uppercase tracking-widest text-cyan-100/50 truncate">
+            {currentTrack?.artists?.[0]?.name || "Aura // Sound Stream"}
+          </p>
+        </div>
+      </div>
+
+      {/* Center: Visualizer & Controls */}
+      <div className="hidden md:flex items-center gap-10 flex-1 justify-center">
+        {/* Simple Audio Visualizer Bars - 5 bars as per design */}
+        <div className="flex items-end gap-1 h-7 w-16 justify-center y2k-screen rounded-xl px-3 py-1.5">
+          {[0.4, 0.8, 0.5, 0.9, 0.6].map((h, i) => (
+            <motion.div
+              key={i}
+              animate={isPlaying ? { height: [`${h * 100}%`, `${(h + 0.3) * 100}%`, `${h * 100}%`] } : { height: "20%" }}
+              transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.1 }}
+              className={cn(
+                "w-[3px] rounded-full",
+                i % 3 === 0 ? "bg-[#b6ff00]" : i % 3 === 1 ? "bg-[#00f5ff]" : "bg-[#ff2bd6]"
+              )}
+              style={{ height: `${h * 100}%` }}
+            />
+          ))}
+        </div>
+
+        <div className="flex items-center gap-4 y2k-screen rounded-full px-4 py-2">
           <button 
-            suppressHydrationWarning
-            onClick={handlePlayPause}
-            className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 transition-transform"
+            onClick={async () => { 
+              if (sdk) {
+                await sdk.previous();
+              } else {
+                previous();
+              }
+            }} 
+            className="text-cyan-100/55 hover:text-[#b6ff00] transition-colors active:scale-90"
+          >
+            <SkipBack className="w-4 h-4 fill-current" />
+          </button>
+          
+          <button
+            onClick={async () => {
+              if (isPlaying) { 
+                pause(); 
+                if (sdk) await sdk.pause(); 
+              } else { 
+                resume(); 
+                if (sdk) await sdk.resume(); 
+              }
+            }}
+            className="w-12 h-12 rounded-full y2k-chrome text-black flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-xl"
           >
             {isPlaying ? (
               <Pause className="w-5 h-5 fill-current" />
             ) : (
-              <Play className="w-5 h-5 fill-current ml-1" />
+              <Play className="w-5 h-5 fill-current translate-x-0.5" />
             )}
           </button>
-          
-          <button suppressHydrationWarning onClick={next} className="text-white/80 hover:text-white transition-colors">
-            <SkipForward className="w-5 h-5 fill-current" />
-          </button>
 
-          <button suppressHydrationWarning className="text-white/50 hover:text-white transition-colors">
-            <Repeat className="w-4 h-4" />
-          </button>
-          
-          <div className="w-[1px] h-4 bg-white/20 mx-2" />
-          
           <button 
-            suppressHydrationWarning
-            onClick={toggleLorePanel}
-            className={`transition-colors ${isLorePanelOpen ? 'text-purple-400' : 'text-white/50 hover:text-white'}`}
-            title="Artist Lore"
+            onClick={async () => { 
+              if (sdk) {
+                await sdk.next();
+              } else {
+                next();
+              }
+            }} 
+            className="text-cyan-100/55 hover:text-[#b6ff00] transition-colors active:scale-90"
           >
-            <Sparkles className="w-4 h-4" />
+            <SkipForward className="w-4 h-4 fill-current" />
           </button>
         </div>
+      </div>
 
-        {/* Volume */}
-        <div className="w-24 flex items-center gap-2">
-          <Volume2 className="w-4 h-4 text-white/60" />
-          <div className="flex-1 h-1 bg-black/40 rounded-full overflow-hidden relative cursor-pointer">
-            <div className="absolute top-0 left-0 h-full w-4/5 bg-white/80 rounded-full" />
-          </div>
+      {/* Right: HQ Audio Button & Volume */}
+      <div className="flex items-center gap-4 md:gap-6 flex-none pr-2 md:pr-4">
+        <button 
+          onClick={toggleLorePanel}
+          className={cn(
+            "hidden md:flex px-5 py-2.5 rounded-full border transition-all gap-1.5 items-center text-[9px] font-mono font-bold tracking-[0.2em] uppercase cursor-pointer",
+            isLorePanelOpen 
+              ? "bg-pink-500/20 border-pink-300/50 text-pink-100 shadow-[0_0_20px_rgba(255,43,214,0.3)] animate-pulse" 
+              : "y2k-button text-white/70 hover:text-white hover:border-cyan-300/40"
+          )}
+        >
+          <Sparkles className={cn("w-3.5 h-3.5", isLorePanelOpen ? "text-pink-200 animate-spin" : "text-[#b6ff00]")} style={{ animationDuration: isLorePanelOpen ? "4s" : "3s" }} />
+          Lore File
+        </button>
+
+        <button className="hidden lg:flex px-5 py-2.5 rounded-full y2k-screen text-[9px] font-mono font-bold tracking-[0.2em] text-cyan-100/70 hover:text-white transition-all uppercase">
+          CD Quality
+        </button>
+        
+        <div className="hidden md:flex items-center gap-3">
+          <Volume2 className="w-4 h-4 text-cyan-100/50 shrink-0" />
+          <input 
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
+            onChange={(e) => {
+              const val = parseFloat(e.target.value);
+              setVolume(val);
+              if (sdk && session?.accessToken) {
+                fetch(`https://api.spotify.com/v1/me/player/volume?volume_percent=${Math.round(val * 100)}`, {
+                  method: "PUT",
+                  headers: { Authorization: `Bearer ${session.accessToken}` }
+                }).catch(err => console.warn("[Aura] Spotify volume set failed:", err));
+              }
+            }}
+            className="premium-slider w-20 h-1 rounded-full cursor-pointer focus:outline-none"
+          />
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   );
 }

@@ -71,4 +71,11 @@ export class SpotifyClient {
   async getPlaylistTracks(playlistId: string): Promise<{ items: { track: SpotifyTrack }[] }> {
     return this.fetchAPI(`/playlists/${playlistId}/tracks?limit=50`);
   }
+
+  async getAudioFeatures(trackIds: string[]): Promise<{ audio_features: any[] }> {
+    if (trackIds.length === 0) return { audio_features: [] };
+    // Spotify limits to 100 IDs per request
+    const ids = trackIds.slice(0, 100).join(",");
+    return this.fetchAPI(`/audio-features?ids=${ids}`);
+  }
 }
