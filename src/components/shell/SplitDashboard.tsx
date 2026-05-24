@@ -70,10 +70,6 @@ export function SplitDashboard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setIsMounted(true);
-    const played = sessionStorage.getItem("aura-splash-played");
-    if (played === "true") {
-      setShowSplash(false);
-    }
   }, []);
 
   useEffect(() => {
@@ -109,7 +105,6 @@ export function SplitDashboard({ children }: { children: React.ReactNode }) {
       {showSplash && (
         <SplashReveal
           onComplete={() => {
-            sessionStorage.setItem("aura-splash-played", "true");
             setShowSplash(false);
           }}
         />

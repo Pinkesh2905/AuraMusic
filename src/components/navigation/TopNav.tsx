@@ -85,9 +85,9 @@ export function TopNav() {
       <div className="flex items-center gap-3 md:gap-6 justify-self-end">
         <div
           onClick={() => setMoodPromptOpen(true)}
-          className="cursor-pointer px-4 py-2.5 rounded-full y2k-screen flex items-center gap-3 hover:border-pink-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group w-52 sm:w-72"
+          className="cursor-pointer h-11 w-11 sm:h-auto sm:w-72 p-0 sm:px-4 sm:py-2.5 rounded-full y2k-screen flex items-center justify-center sm:justify-between gap-0 sm:gap-3 hover:border-pink-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shrink-0"
         >
-          <span className="text-[10px] font-mono font-black tracking-[0.18em] uppercase text-cyan-100/65 group-hover:text-white transition-colors truncate flex-1 text-left select-none">
+          <span className="hidden sm:inline-block text-[10px] font-mono font-black tracking-[0.18em] uppercase text-cyan-100/65 group-hover:text-white transition-colors truncate flex-1 text-left select-none">
             {status === "authenticated" ? "VIBE SCANNER READY" : "CONNECT SPOTIFY"}
           </span>
           <div className="w-6 h-6 rounded-full y2k-chrome flex items-center justify-center text-violet-950 transition-all shrink-0">

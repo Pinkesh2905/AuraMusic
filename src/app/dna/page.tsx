@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Dna, Zap, Music2, User2 } from "lucide-react";
+import { Dna, Zap, Music2, User2, LogOut } from "lucide-react";
 import { SmoothLoader } from "@/components/ui/SmoothLoader";
+import { signOut } from "next-auth/react";
 
 interface DnaData {
   personality: {
@@ -269,6 +270,17 @@ export default function DnaPage() {
           </motion.div>
         </motion.div>
       )}
+
+      {/* Sign Out Button (especially for Mobile users) */}
+      <motion.div variants={itemVariants} className="mt-8 flex justify-center w-full">
+        <button
+          onClick={() => signOut({ callbackUrl: "/login" })}
+          className="w-full max-w-sm flex items-center justify-center gap-3 px-6 py-4 rounded-2xl text-rose-300 font-bold border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 active:scale-[0.98] transition-all font-display tracking-wider cursor-pointer group"
+        >
+          <LogOut className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          <span>SIGN OUT OF AURA</span>
+        </button>
+      </motion.div>
     </motion.main>
   );
 }
