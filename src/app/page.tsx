@@ -992,7 +992,7 @@ export default function Home() {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="w-full max-w-7xl mx-auto px-4 md:px-8 pt-32 pb-36 flex flex-col min-h-screen relative z-10"
+      className="w-full max-w-7xl mx-auto px-4 md:px-8 pt-28 md:pt-32 pb-36 flex flex-col min-h-screen relative z-10"
     >
       {/* Dynamic Background Colored Blooms */}
       <div 
@@ -1005,17 +1005,17 @@ export default function Home() {
       />
 
       {/* Main Grid Hero Layout (Split columns) */}
-      <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-10 items-center z-10 mt-6 relative">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-8 items-center z-10 mt-4 relative">
         {/* Left Column: Description & Premium CTAs */}
-        <div className="flex flex-col gap-4.5 max-w-md text-left z-10">
+        <div className="flex flex-col gap-4 max-w-md text-left z-10">
           <span className="text-[10px] font-mono font-black text-[#b6ff00] tracking-[0.3em] uppercase leading-none">
             {festival ? `✦ Celebrating ${festival.name} ✦` : "Aura Sound Intelligence"}
           </span>
-          <h2 className="text-4xl md:text-5xl font-brush text-white font-black leading-none uppercase tracking-normal neon-text">
+          <h2 className="text-3xl md:text-5xl font-brush text-white font-black leading-none uppercase tracking-normal neon-text">
             {getGreeting(new Date(), session?.user?.name || undefined)}
           </h2>
           
-          <div className="h-16 flex items-center">
+          <div className="h-14 flex items-center">
             <AnimatePresence mode="wait">
               <motion.p 
                 key={insightIdx}
@@ -1032,7 +1032,7 @@ export default function Home() {
           
           <button
             onClick={() => setMoodPromptOpen(true)}
-            className="group relative mt-3 self-start overflow-hidden rounded-full p-[1.5px] focus:outline-none hover:scale-102 active:scale-98 transition-all duration-300 shrink-0 cursor-pointer y2k-button"
+            className="group relative mt-2 self-start overflow-hidden rounded-full p-[1.5px] focus:outline-none hover:scale-102 active:scale-98 transition-all duration-300 shrink-0 cursor-pointer y2k-button"
           >
             <span className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-400 to-cyan-400 opacity-60 group-hover:opacity-100 transition-opacity animate-pulse duration-3000" />
             <div className="relative flex items-center gap-2 rounded-full px-6 py-3 text-xs font-mono font-bold tracking-widest text-white/90 uppercase backdrop-blur-3xl transition-all">
@@ -1042,8 +1042,8 @@ export default function Home() {
           </button>
         </div>
 
-        {/* Center Column: Rotating glowing centerpiece logo */}
-        <div className="flex justify-center items-center relative" onClick={() => setMoodPromptOpen(true)}>
+        {/* Center Column: Rotating glowing centerpiece logo — hidden on mobile to save space */}
+        <div className="hidden lg:flex justify-center items-center relative" onClick={() => setMoodPromptOpen(true)}>
           {renderCenterpiece()}
           
           {isPlaying && currentTrack && (
@@ -1059,8 +1059,8 @@ export default function Home() {
           )}
         </div>
 
-        {/* Right Column: Morphing Stats / Active Vibe playlist card */}
-        <div className="flex justify-center lg:justify-end lg:pr-4 z-10">
+        {/* Right Column: Morphing Stats / Active Vibe playlist card — hidden on mobile */}
+        <div className="hidden lg:flex justify-end lg:pr-4 z-10">
           {activeVibe ? renderActiveVibeCard() : renderDefaultStatsCard()}
         </div>
       </div>
@@ -1070,7 +1070,7 @@ export default function Home() {
       {/* 1. Recently Played Shelf (Latest Heard Songs) */}
       <motion.section 
         variants={itemVariants}
-        className="w-full mt-24 flex flex-col gap-6 z-10"
+        className="w-full mt-10 md:mt-20 flex flex-col gap-6 z-10"
       >
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-2xl y2k-screen text-white/80">
@@ -1121,7 +1121,7 @@ export default function Home() {
       {/* 2. Top Tracks Shelf (Heard the Most) */}
       <motion.section 
         variants={itemVariants}
-        className="w-full mt-16 flex flex-col gap-6 z-10"
+        className="w-full mt-10 md:mt-16 flex flex-col gap-6 z-10"
       >
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-2xl bg-white/5 border border-white/10 text-white/80">
@@ -1175,7 +1175,7 @@ export default function Home() {
       {/* 3. Best Recommendations Shelf (Real Spotify recommendation seed engine) */}
       <motion.section 
         variants={itemVariants}
-        className="w-full mt-16 flex flex-col gap-6 z-10"
+        className="w-full mt-10 md:mt-16 flex flex-col gap-6 z-10"
       >
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-2xl bg-violet-500/10 border border-violet-500/20 text-violet-400">

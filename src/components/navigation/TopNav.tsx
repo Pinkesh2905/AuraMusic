@@ -82,7 +82,7 @@ export function TopNav() {
         ))}
       </div>
 
-      <div className="flex items-center gap-3 md:gap-6 justify-self-end">
+      <div className="flex items-center gap-2 md:gap-6 justify-self-end">
         <div
           onClick={() => setMoodPromptOpen(true)}
           className="cursor-pointer h-11 w-11 sm:h-auto sm:w-72 p-0 sm:px-4 sm:py-2.5 rounded-full y2k-screen flex items-center justify-center sm:justify-between gap-0 sm:gap-3 hover:border-pink-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shrink-0"
@@ -122,7 +122,7 @@ export function TopNav() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.2, ease: "easeOut" }}
-                  className="absolute right-0 mt-3 w-72 rounded-[1.6rem] y2k-panel crt-scanlines p-2.5 z-50 overflow-hidden flex flex-col gap-1"
+                  className="absolute right-0 mt-3 w-72 max-w-[calc(100vw-2rem)] rounded-[1.6rem] y2k-panel crt-scanlines p-2.5 z-50 overflow-hidden flex flex-col gap-1"
                 >
                   <div className="px-3.5 py-3 mb-1 border-b border-cyan-300/10 flex flex-col">
                     <span className="text-[10px] font-black text-[#b6ff00] leading-none font-mono tracking-[0.18em] uppercase">

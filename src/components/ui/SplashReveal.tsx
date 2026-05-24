@@ -398,7 +398,7 @@ export function SplashReveal({ onComplete }: SplashRevealProps) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0, filter: "blur(20px)" }}
         transition={{ duration: 1.2, ease: "easeInOut" }}
-        className="fixed inset-0 z-[9998] flex flex-col items-center justify-center bg-[#05030f] overflow-hidden crt-scanlines"
+        className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-[#05030f] overflow-hidden crt-scanlines"
       >
         {/* Deep starry background with retro grid mask */}
         <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_30%_30%,#ff2bd6_0%,transparent_60%),radial-gradient(circle_at_70%_70%,#00f5ff_0%,transparent_60%)] z-0" />

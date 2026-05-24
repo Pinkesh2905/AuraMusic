@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 export default function SignupPage() {
   return (
-    <div className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-[#05030f] overflow-hidden crt-scanlines">
+    <div className="relative min-h-screen w-full grid grid-cols-1 lg:grid-cols-2 bg-[#05030f] overflow-hidden crt-scanlines">
       
       {/* Left Side: The Vibe (Premium Blurred Overlay with Quote) */}
       <div className="relative hidden lg:flex items-center justify-center p-16 overflow-hidden border-r border-cyan-300/15 pixel-grid">
