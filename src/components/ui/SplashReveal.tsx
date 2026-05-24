@@ -264,10 +264,10 @@ export function SplashReveal({ onComplete }: SplashRevealProps) {
       playDolbyWhisper();
     }, 400);
 
-    // 2. Trigger automatic screen completion reveal after 4.2 seconds
+    // 2. Trigger automatic screen completion reveal after 4 seconds
     const completeTimer = setTimeout(() => {
       onComplete();
-    }, 2000);
+    }, 4000);
 
     // 3. Setup canvas particle background animation
     const canvas = canvasRef.current;
@@ -452,9 +452,9 @@ export function SplashReveal({ onComplete }: SplashRevealProps) {
           </motion.div>
 
           {/* AURA Chrome 3D Title Reveal */}
-          <h1 className="flex items-center justify-center gap-3 md:gap-6 overflow-hidden relative">
+          <h1 className="flex items-center justify-center gap-1 sm:gap-3 md:gap-6 relative">
             {/* Background pink glow behind title */}
-            <div className="absolute text-[8rem] sm:text-[11rem] md:text-[15rem] font-black tracking-widest text-[#ff2bd6] opacity-35 blur-[35px] font-brush leading-none select-none">
+            <div className="absolute text-[5rem] sm:text-[11rem] md:text-[15rem] font-black tracking-widest text-[#ff2bd6] opacity-35 blur-[35px] font-brush leading-none select-none">
               AURA
             </div>
             
@@ -480,7 +480,7 @@ export function SplashReveal({ onComplete }: SplashRevealProps) {
                   delay: 0.2 + index * 0.14,
                   filter: { duration: 1.6 }
                 }}
-                className="font-brush text-white text-[8rem] sm:text-[11rem] md:text-[15rem] font-bold leading-none select-none tracking-widest y2k-chrome-giant-text select-none"
+                className="font-brush text-white text-[5rem] sm:text-[11rem] md:text-[15rem] font-bold leading-none select-none tracking-wide sm:tracking-widest y2k-chrome-giant-text"
               >
                 {letter}
               </motion.span>
