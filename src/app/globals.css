@@ -474,3 +474,112 @@
     background-position: 56px 56px, 56px 56px;
   }
 }
+
+/* Y2K Chrome Splash Screen & Intro styles */
+.y2k-chrome-giant-text {
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #e2e8f0 32%,
+    #475569 49%,
+    #0f172a 50%,
+    #ec4899 53%,
+    #f472b6 75%,
+    #ffffff 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.95))
+          drop-shadow(0 0 25px rgba(255, 43, 214, 0.65));
+}
+
+.signature-pink {
+  color: #ff55df;
+  text-shadow: 
+    0 0 4px rgba(255, 85, 223, 0.8),
+    0 0 12px rgba(255, 43, 214, 0.9),
+    0 0 24px rgba(255, 43, 214, 0.5);
+  font-family: var(--font-display), cursive, system-ui;
+  letter-spacing: 0.05em;
+}
+
+.y2k-oval-badge {
+  background: linear-gradient(
+    180deg, 
+    #ffffff 0%, 
+    #cbd5e1 45%, 
+    #334155 50%, 
+    #ffffff 55%, 
+    #ff2bd6 100%
+  );
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 0 15px rgba(255, 43, 214, 0.35);
+  border: 1.5px solid rgba(0, 245, 255, 0.4);
+}
+
+.specular-sparkle {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9))
+          drop-shadow(0 0 18px rgba(255, 43, 214, 0.7));
+}
+
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+.animate-float-gentle {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+@keyframes float-headphones {
+  0%, 100% {
+    transform: translateY(0px) rotate(-12deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(-6deg);
+  }
+}
+
+.animate-float-headphones {
+  animation: float-headphones 5s ease-in-out infinite;
+}
+
+@keyframes pulse-speaker {
+  0%, 100% {
+    transform: scale(1) rotate(12deg);
+  }
+  15% {
+    transform: scale(1.05) rotate(10deg);
+  }
+  30% {
+    transform: scale(0.98) rotate(13deg);
+  }
+  45% {
+    transform: scale(1.03) rotate(11deg);
+  }
+}
+
+.animate-pulse-speaker {
+  animation: pulse-speaker 2s ease-in-out infinite;
+}
+
+@keyframes twinkle-star {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.animate-twinkle {
+  animation: twinkle-star 3s ease-in-out infinite;
+}
+
