@@ -175,12 +175,6 @@ export function TopNav() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const navItems = [
-    { name: "Discover", href: "/discover" },
-    { name: "Your Profile", href: "/dna" },
-    { name: "Time Capsules", href: "/capsules" },
-  ];
-
   const handleAvatarClick = () => {
     if (isMobile) {
       setMobileSheetOpen(true);
@@ -205,79 +199,79 @@ export function TopNav() {
         className={cn(
           "fixed top-0 left-0 w-full h-24 px-4 md:px-8 grid grid-cols-[auto_1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center z-[100] transition-all duration-500",
           scrolled
-            ? "bg-[#07031a]/85 backdrop-blur-xl border-b border-cyan-300/20 shadow-[0_18px_44px_rgba(0,0,0,0.42),0_0_28px_rgba(0,245,255,0.08)]"
-            : "bg-gradient-to-b from-[#07031a]/85 via-[#07031a]/42 to-transparent backdrop-blur-[3px] border-b border-transparent"
+            ? "bg-[#07031a]/95 backdrop-blur-xl border-b border-pink-500/20 shadow-[0_18px_44px_rgba(0,0,0,0.6),0_0_28px_rgba(255,43,214,0.08)]"
+            : "bg-gradient-to-b from-[#07031a]/90 via-[#07031a]/40 to-transparent backdrop-blur-[2px] border-b border-transparent"
         )}
       >
         <div className="flex items-center gap-2 md:gap-3.5 justify-self-start z-10">
-          <div className="relative group shrink-0">
-            <div className="w-11 h-11 rounded-2xl y2k-chrome p-1.5 rotate-[-3deg] group-hover:rotate-0 transition-transform">
-              <img src="/images/aura_logo.png" className="w-full h-full object-contain" alt="AURA" />
-            </div>
-            <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#b6ff00] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#b6ff00]" />
-            </span>
+          <div className="relative flex items-center group cursor-pointer select-none">
+            {/* Spinning orbit ring going around AURA brand */}
+            <div className="absolute inset-x-[-15px] inset-y-[-8px] rounded-full border border-pink-500/80 animate-spin-slow opacity-85 shadow-[0_0_15px_rgba(255,43,214,0.6)]" style={{ transform: "rotateX(72deg) rotate(15deg)", animationDuration: "12s" }} />
+            <div className="absolute top-[-6px] left-[-6px] text-pink-400 text-xs animate-pulse">✦</div>
+            <div className="absolute bottom-[-6px] right-[-6px] text-pink-400 text-xs animate-pulse" style={{ animationDelay: "1s" }}>✦</div>
+            <Link href="/" className="font-brush text-2xl md:text-3xl text-white font-black tracking-[0.1em] italic select-none filter drop-shadow-[0_0_10px_rgba(255,43,214,0.85)] hover:scale-103 transition-transform">
+              AURA
+            </Link>
           </div>
-
-          <Link href="/" className="font-brush text-lg md:text-xl text-white hover:opacity-90 transition-opacity font-black tracking-normal flex items-center gap-2 neon-text">
-            <span>AURA</span>
-            <div className="flex items-end gap-[1.5px] h-3.5 w-6 pt-1.5 overflow-hidden shrink-0" title={isPlaying ? "Music Playing" : "Synced"}>
-              <span className={cn("w-[2px] rounded-full bg-[#b6ff00] origin-bottom transition-all duration-300", isPlaying ? "animate-eq-1 h-3" : "h-1.5")} />
-              <span className={cn("w-[2px] rounded-full bg-[#00f5ff] origin-bottom transition-all duration-300", isPlaying ? "animate-eq-2 h-3.5" : "h-2.5")} />
-              <span className={cn("w-[2px] rounded-full bg-[#ff2bd6] origin-bottom transition-all duration-300", isPlaying ? "animate-eq-3 h-2.5" : "h-1")} />
-              <span className={cn("w-[2px] rounded-full bg-[#b6ff00] origin-bottom transition-all duration-300", isPlaying ? "animate-eq-4 h-3" : "h-2")} />
-            </div>
-          </Link>
-
-          <span className="hidden sm:inline-flex px-2 py-1 rounded-md y2k-screen text-[9px] font-mono font-black tracking-[0.22em] text-cyan-200">
-            AURA.EXE
-          </span>
         </div>
 
-        <div className="hidden lg:flex items-center gap-3 justify-self-center y2k-panel rounded-full px-3 py-2">
-          {navItems.map((item) => (
+        <div className="hidden lg:flex items-center gap-1.5 justify-self-center bg-[#130d2a]/60 border border-white/5 rounded-full px-2 py-1.5 backdrop-blur-md">
+          {[
+            { name: "HOME", href: "/", active: true },
+            { name: "DISCOVER", href: "/discover", active: false },
+            { name: "FOR YOU", href: "/discover", active: false },
+            { name: "TIME CAPSULE", href: "/capsules", active: false },
+          ].map((item) => (
             <Link
               key={item.name}
               href={item.href}
-              className="px-4 py-2 rounded-full text-[10px] font-mono font-black tracking-[0.2em] uppercase text-white/58 hover:text-[#b6ff00] hover:bg-white/8 hover:scale-[1.02] transition-all duration-300"
+              className={cn(
+                "px-5 py-2 rounded-full text-[10px] font-mono font-black tracking-[0.2em] transition-all duration-300",
+                item.active
+                  ? "bg-gradient-to-r from-purple-950/60 to-pink-950/60 border border-pink-500/30 text-pink-300 shadow-[0_0_15px_rgba(255,43,214,0.25)]"
+                  : "text-zinc-400 hover:text-white"
+              )}
             >
               {item.name}
             </Link>
           ))}
         </div>
 
-        <div className="flex items-center gap-2 md:gap-6 justify-self-end">
+        <div className="flex items-center gap-3 md:gap-4 justify-self-end">
+          {/* Feeling good heartbeat waveform status */}
           <div
             onClick={() => setMoodPromptOpen(true)}
-            className="cursor-pointer h-11 w-11 sm:h-auto sm:w-72 p-0 sm:px-4 sm:py-2.5 rounded-full y2k-screen flex items-center justify-center sm:justify-between gap-0 sm:gap-3 hover:border-pink-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group shrink-0"
+            className="cursor-pointer px-4.5 py-2.5 rounded-full bg-[#181135]/50 border border-pink-500/20 hover:border-pink-500/40 flex items-center gap-3 transition-all duration-300 group shrink-0"
           >
-            <span className="hidden sm:inline-block text-[10px] font-mono font-black tracking-[0.18em] uppercase text-cyan-100/65 group-hover:text-white transition-colors truncate flex-1 text-left select-none">
-              {status === "authenticated" ? "VIBE SCANNER READY" : "CONNECT SPOTIFY"}
-            </span>
-            <div className="w-6 h-6 rounded-full y2k-chrome flex items-center justify-center text-violet-950 transition-all shrink-0">
-              <Sparkles className="w-3 h-3 text-current" />
+            <div className="flex items-end gap-[2px] h-3 w-7 pt-1 overflow-hidden" title="Feeling Good">
+              <span className="w-[1.5px] h-2 rounded-full bg-pink-500 animate-eq-1" />
+              <span className="w-[1.5px] h-3 rounded-full bg-pink-400 animate-eq-2" />
+              <span className="w-[1.5px] h-1.5 rounded-full bg-pink-500 animate-eq-3" />
+              <span className="w-[1.5px] h-2.5 rounded-full bg-pink-400 animate-eq-4" />
             </div>
+            <span className="text-[9px] font-mono font-black tracking-[0.16em] uppercase text-pink-300 select-none flex items-center gap-1.5">
+              FEELING GOOD <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse inline-block shadow-[0_0_8px_#4ade80]" />
+            </span>
           </div>
 
           {status === "authenticated" && (
             <div className="relative shrink-0" ref={dropdownRef}>
               <button
                 onClick={handleAvatarClick}
-                className="flex items-center gap-2 px-2.5 py-1.5 rounded-full y2k-panel hover:border-cyan-300/45 active:scale-[0.98] transition-all duration-300 cursor-pointer group shrink-0"
+                className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-[#181135]/50 border border-white/5 hover:border-cyan-300/30 active:scale-[0.98] transition-all duration-300 cursor-pointer group shrink-0"
                 title={`${session.user?.name || "Profile"} Menu`}
               >
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm font-semibold text-white overflow-hidden border border-cyan-300/30">
+                <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-sm font-semibold text-white overflow-hidden border border-white/10 shrink-0">
                   {session.user?.image ? (
                     <img src={session.user.image} alt={session.user.name || "Profile"} className="w-full h-full object-cover" />
                   ) : (
-                    session.user?.name?.charAt(0) || "A"
+                    <span className="text-xs uppercase">{session.user?.name?.charAt(0) || "P"}</span>
                   )}
                 </div>
-                <span className="hidden md:inline text-[10px] font-mono font-black tracking-[0.18em] text-white/70 group-hover:text-white transition-colors max-w-[100px] truncate uppercase">
-                  {session.user?.name || "Profile"}
+                <span className="hidden md:inline text-[9px] font-mono font-black tracking-[0.16em] text-zinc-300 group-hover:text-white transition-colors max-w-[100px] truncate uppercase">
+                  {session.user?.name ? session.user.name.toUpperCase() : "PINKESH"}
                 </span>
-                <ChevronDown className={cn("w-3.5 h-3.5 text-white/40 group-hover:text-white/70 transition-transform duration-300 shrink-0", dropdownOpen && "rotate-180")} />
+                <ChevronDown className={cn("w-3 h-3 text-zinc-400 group-hover:text-white transition-transform duration-300 shrink-0", dropdownOpen && "rotate-180")} />
               </button>
 
               {/* Desktop-only dropdown */}
@@ -292,10 +286,10 @@ export function TopNav() {
                   >
                     <div className="px-3.5 py-3 mb-1 border-b border-cyan-300/10 flex flex-col">
                       <span className="text-[10px] font-black text-[#b6ff00] leading-none font-mono tracking-[0.18em] uppercase">
-                        {session.user?.name || "Aura Member"}
+                        {session.user?.name ? session.user.name.toUpperCase() : "PINKESH"}
                       </span>
                       <span className="text-[10px] font-mono text-zinc-400 truncate mt-1">
-                        {session.user?.email || "aura.listener@spotify.com"}
+                        {session.user?.email || "pinkesh.aura@spotify.com"}
                       </span>
                     </div>
 

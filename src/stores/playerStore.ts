@@ -49,11 +49,26 @@ interface PlayerState {
 }
 
 export const usePlayerStore = create<PlayerState>((set, get) => ({
-  currentTrack: null,
+  currentTrack: {
+    id: "ghost-in-the-static",
+    name: "Ghost in the Static",
+    uri: "spotify:track:6e6f67f68f",
+    duration_ms: 165000,
+    preview_url: null,
+    album: {
+      id: "",
+      name: "",
+      uri: "",
+      images: [{ url: "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=500&q=80", width: 300, height: 300 }],
+      artists: [{ id: "rameses-b-id", name: "Rameses B", uri: "" }],
+      release_date: ""
+    },
+    artists: [{ id: "rameses-b-id", name: "Rameses B", uri: "" }]
+  },
   queue: [],
   isPlaying: false,
   progress: 0,
-  duration: 0,
+  duration: 165000,
   volume: 0.8,
   shuffle: false,
   repeat: 'off',

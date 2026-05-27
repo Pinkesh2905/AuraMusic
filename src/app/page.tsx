@@ -17,7 +17,10 @@ import {
   Flame, 
   Heart,
   Compass,
-  Headphones
+  Headphones,
+  X,
+  Wand2,
+  ArrowRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NeuralStreamCard } from "@/components/home/NeuralStreamCard";
@@ -899,49 +902,114 @@ export default function Home() {
         {/* Vibe Prompt Tuner Modal Overlay */}
         <AnimatePresence>
           {isMoodPromptOpen && (
-            <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/75 backdrop-blur-xl">
-              <motion.div 
-                initial={{ scale: 0.95, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.95, opacity: 0 }}
-                className="glass-premium rounded-[3rem] border border-white/10 bg-black/60 backdrop-blur-2xl p-8 md:p-12 w-full max-w-xl relative overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.8)]"
+            <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-md">
+              {/* Animated background glow behind modal */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 z-0 pointer-events-none"
               >
-                <div className="absolute -left-20 -top-20 w-60 h-60 rounded-full bg-violet-400/10 blur-[80px]" />
-                <div className="absolute -right-20 -bottom-20 w-60 h-60 rounded-full bg-purple-500/10 blur-[80px]" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-violet-600/20 blur-[120px] rounded-full" />
+              </motion.div>
 
-                <button 
-                  onClick={() => setMoodPromptOpen(false)}
-                  className="absolute top-8 right-8 text-white/40 hover:text-white font-mono text-xs tracking-wide hover:underline"
-                >
-                  CLOSE [ESC]
-                </button>
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.95, opacity: 0, y: 10 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="relative z-10 w-full max-w-2xl"
+              >
+                {/* Outer Glow Border / Container */}
+                <div className="relative rounded-[2.5rem] p-[1px] overflow-hidden group">
+                  {/* Animated Conic Gradient Border */}
+                  <div className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0_340deg,white_360deg)] opacity-20 group-hover:opacity-100 transition-opacity duration-500 animate-[spin_4s_linear_infinite]" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/0" />
+                  
+                  {/* Inner Modal Content */}
+                  <div className="relative bg-[#090514]/95 backdrop-blur-3xl rounded-[2.5rem] p-8 sm:p-10 shadow-2xl flex flex-col gap-8 overflow-hidden">
+                    
+                    {/* Subtle grid pattern background */}
+                    <div className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none" style={{ backgroundImage: "linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
+                    <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(124, 58, 237, 0.15) 0%, transparent 70%)' }} />
 
-                <div className="flex flex-col gap-6 relative z-10">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-violet-300" />
-                    <span className="text-xs font-mono font-bold text-violet-300">
-                      Mood Sync
-                    </span>
-                  </div>
+                    {/* Header */}
+                    <div className="flex justify-between items-start relative z-10">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-fuchsia-500 flex items-center justify-center shadow-[0_0_20px_rgba(124,58,237,0.4)]">
+                          <Sparkles className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h2 className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/60 tracking-tight">
+                            Aura Mood Synapse
+                          </h2>
+                          <p className="text-xs sm:text-sm text-zinc-400 font-medium mt-1">
+                            Describe your vibe, let AI curate the sound.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <button
+                        onClick={() => setMoodPromptOpen(false)}
+                        className="p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all cursor-pointer backdrop-blur-md"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
 
-                  <input
-                      type="text"
-                      value={promptText}
-                      onChange={(e) => setPromptText(e.target.value)}
-                      placeholder="What mood do you want?"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-violet-400/40 focus:ring-1 focus:ring-violet-300/20 transition-all" />
+                    {/* Input Area */}
+                    <div className="relative z-10 group/input">
+                      <div className="absolute -inset-1 rounded-[1.5rem] bg-gradient-to-r from-violet-600/30 via-fuchsia-600/30 to-blue-600/30 opacity-0 group-focus-within/input:opacity-100 blur transition-opacity duration-500" />
+                      <div className="relative">
+                        <textarea
+                          value={promptText}
+                          onChange={(e) => setPromptText(e.target.value)}
+                          placeholder="e.g., Late night drive through a neon city, cyberpunk aesthetics..."
+                          className="w-full h-32 bg-black/40 border border-white/10 rounded-[1.5rem] p-6 text-sm sm:text-base text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-violet-500/50 resize-none transition-all shadow-inner leading-relaxed"
+                        />
+                        
+                        {/* Character count or prompt suggestion */}
+                        <div className="absolute bottom-4 right-4 flex items-center gap-2">
+                          <span className="text-xs font-mono text-zinc-500">
+                            {promptText.length}/150
+                          </span>
+                          <button 
+                            onClick={() => setPromptText("Late night drive through a neon city, cyberpunk aesthetics...")}
+                            className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                            title="Inspire me"
+                          >
+                            <Wand2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-[8px] font-mono text-white/30 tracking-wide">
-                      Ready
-                    </span>
-                    <button
-                      onClick={handleVibeSubmit}
-                      disabled={isSubmitting || !promptText.trim()}
-                      className="px-8 py-4 rounded-full bg-gradient-to-r from-violet-300 via-fuchsia-300 to-sky-300 hover:from-violet-200 hover:to-sky-200 disabled:opacity-40 text-black font-bold tracking-wide text-xs hover:scale-103 active:scale-97 transition-all flex items-center gap-2 shadow-[0_0_30px_rgba(6,182,212,0.25)]"
-                    >
-                      {isSubmitting ? "Working..." : "Start"}
-                    </button>
+                    {/* Footer Controls */}
+                    <div className="flex justify-between items-center relative z-10 pt-2 border-t border-white/5">
+                      <div className="flex items-center gap-2">
+                        <span className="relative flex h-2.5 w-2.5">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                        </span>
+                        <span className="text-[10px] font-mono text-emerald-500/90 tracking-widest uppercase font-bold">
+                          Synapse Ready
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={handleVibeSubmit}
+                        disabled={isSubmitting || !promptText.trim()}
+                        className="group relative overflow-hidden rounded-full p-[1px] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      >
+                        <span className="absolute inset-0 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-cyan-400 group-hover:opacity-100 opacity-80 transition-opacity" />
+                        <div className="relative px-8 py-3.5 bg-black/40 group-hover:bg-transparent rounded-full backdrop-blur-md transition-all duration-300 flex items-center gap-2">
+                          <span className="text-xs font-bold tracking-wide text-white">
+                            {isSubmitting ? "Synthesizing..." : "Generate Vibe"}
+                          </span>
+                          <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform duration-300" />
+                        </div>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -1536,52 +1604,114 @@ export default function Home() {
       {/* Vibe Prompt Tuner Modal Overlay */}
       <AnimatePresence>
         {isMoodPromptOpen && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/75 backdrop-blur-xl">
-            <motion.div 
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="glass-premium rounded-[3rem] border border-white/10 bg-black/60 backdrop-blur-2xl p-8 md:p-12 w-full max-w-xl relative overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.8)]"
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-md">
+            {/* Animated background glow behind modal */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-0 pointer-events-none"
             >
-              <div className="absolute -left-20 -top-20 w-60 h-60 rounded-full bg-violet-400/10 blur-[80px]" />
-              <div className="absolute -right-20 -bottom-20 w-60 h-60 rounded-full bg-purple-500/10 blur-[80px]" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-violet-600/20 blur-[120px] rounded-full" />
+            </motion.div>
 
-              <button 
-                onClick={() => setMoodPromptOpen(false)}
-                className="absolute top-8 right-8 text-white/40 hover:text-white font-mono text-xs tracking-wide hover:underline"
-              >
-                CLOSE [ESC]
-              </button>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 10 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative z-10 w-full max-w-2xl"
+            >
+              {/* Outer Glow Border / Container */}
+              <div className="relative rounded-[2.5rem] p-[1px] overflow-hidden group">
+                {/* Animated Conic Gradient Border */}
+                <div className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0_340deg,white_360deg)] opacity-20 group-hover:opacity-100 transition-opacity duration-500 animate-[spin_4s_linear_infinite]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/0" />
+                
+                {/* Inner Modal Content */}
+                <div className="relative bg-[#090514]/95 backdrop-blur-3xl rounded-[2.5rem] p-8 sm:p-10 shadow-2xl flex flex-col gap-8 overflow-hidden">
+                  
+                  {/* Subtle grid pattern background */}
+                  <div className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none" style={{ backgroundImage: "linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
+                  <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(124, 58, 237, 0.15) 0%, transparent 70%)' }} />
 
-              <div className="flex flex-col gap-6 relative z-10">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-violet-300" />
-                  <span className="text-xs font-mono font-bold text-violet-300 animate-pulse">
-                    Aura Mood Synapse
-                  </span>
-                </div>
+                  {/* Header */}
+                  <div className="flex justify-between items-start relative z-10">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-fuchsia-500 flex items-center justify-center shadow-[0_0_20px_rgba(124,58,237,0.4)]">
+                        <Sparkles className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h2 className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/60 tracking-tight">
+                          Aura Mood Synapse
+                        </h2>
+                        <p className="text-xs sm:text-sm text-zinc-400 font-medium mt-1">
+                          Describe your vibe, let AI curate the sound.
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <button
+                      onClick={() => setMoodPromptOpen(false)}
+                      className="p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all cursor-pointer backdrop-blur-md"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
 
+                  {/* Input Area */}
+                  <div className="relative z-10 group/input">
+                    <div className="absolute -inset-1 rounded-[1.5rem] bg-gradient-to-r from-violet-600/30 via-fuchsia-600/30 to-blue-600/30 opacity-0 group-focus-within/input:opacity-100 blur transition-opacity duration-500" />
+                    <div className="relative">
+                      <textarea
+                        value={promptText}
+                        onChange={(e) => setPromptText(e.target.value)}
+                        placeholder="e.g., Late night drive through a neon city, cyberpunk aesthetics..."
+                        className="w-full h-32 bg-black/40 border border-white/10 rounded-[1.5rem] p-6 text-sm sm:text-base text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-violet-500/50 resize-none transition-all shadow-inner leading-relaxed"
+                      />
+                      
+                      {/* Character count or prompt suggestion */}
+                      <div className="absolute bottom-4 right-4 flex items-center gap-2">
+                        <span className="text-xs font-mono text-zinc-500">
+                          {promptText.length}/150
+                        </span>
+                        <button 
+                          onClick={() => setPromptText("Late night drive through a neon city, cyberpunk aesthetics...")}
+                          className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                          title="Inspire me"
+                        >
+                          <Wand2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
 
+                  {/* Footer Controls */}
+                  <div className="flex justify-between items-center relative z-10 pt-2 border-t border-white/5">
+                    <div className="flex items-center gap-2">
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                      </span>
+                      <span className="text-[10px] font-mono text-emerald-500/90 tracking-widest uppercase font-bold">
+                        Synapse Ready
+                      </span>
+                    </div>
 
-                <input
-                  type="text"
-                  value={promptText}
-                  onChange={(e) => setPromptText(e.target.value)}
-                  placeholder="Enter vibe description..."
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-violet-400/40 focus:ring-1 focus:ring-violet-300/20 transition-all"
-                />
-
-                <div className="flex justify-between items-center">
-                  <span className="text-[8px] font-mono text-white/30 tracking-wide">
-                    Aura Protocol Activated
-                  </span>
-                  <button
-                    onClick={handleVibeSubmit}
-                    disabled={isSubmitting || !promptText.trim()}
-                    className="px-8 py-4 rounded-full bg-gradient-to-r from-violet-300 via-fuchsia-300 to-sky-300 hover:from-violet-200 hover:to-sky-200 disabled:opacity-40 text-black font-bold tracking-wide text-xs hover:scale-103 active:scale-97 transition-all flex items-center gap-2 shadow-[0_0_30px_rgba(6,182,212,0.25)]"
-                  >
-                    {isSubmitting ? "Blending wave..." : "Align Vibe ✦"}
-                  </button>
+                    <button
+                      onClick={handleVibeSubmit}
+                      disabled={isSubmitting || !promptText.trim()}
+                      className="group relative overflow-hidden rounded-full p-[1px] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      <span className="absolute inset-0 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-cyan-400 group-hover:opacity-100 opacity-80 transition-opacity" />
+                      <div className="relative px-8 py-3.5 bg-black/40 group-hover:bg-transparent rounded-full backdrop-blur-md transition-all duration-300 flex items-center gap-2">
+                        <span className="text-xs font-bold tracking-wide text-white">
+                          {isSubmitting ? "Synthesizing..." : "Generate Vibe"}
+                        </span>
+                        <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform duration-300" />
+                      </div>
+                    </button>
+                  </div>
                 </div>
               </div>
             </motion.div>
